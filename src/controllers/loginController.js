@@ -29,7 +29,7 @@ const login = async function (req, res) {
             groupNo: "19",
         }, "Group-19")
 
-        res.setHeader("for-check", "token");
+        res.setHeader("x-api-key", token);
         return res.status(200).send({ status: true, msg: "You are successfully logged in", token })
     }
 

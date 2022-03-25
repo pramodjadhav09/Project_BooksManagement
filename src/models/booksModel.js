@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 
-const bookSchema = mongoose.schema({
+const bookSchema = new mongoose.Schema({
 
     title: {
-        typr: String,
+        type: String,
         required: true,
         unique: true
     },
@@ -24,16 +24,16 @@ const bookSchema = mongoose.schema({
         unique: true
     },
     category: {
-        true: String,
+        type: String,
         required: true //mandatory
     },
     subcategory: {
         type: String,
-        require: true// mandatory
+        required: true// mandatory
     },
     reviews: {
         type: Number,
-        default: 0,
+        default: 0
         // comment: Holds number of reviews of this book
     },
     deletedAt: {

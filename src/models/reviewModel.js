@@ -1,6 +1,8 @@
 const mongoose= require('mongoose');
-const ObjectId = mongoose.schema.Type.ObjectId;
-const reviweSchema = mongoose.Schema({
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
+
+const reviweSchema = new mongoose.Schema({
     bookId: {
         type:ObjectId, 
         required:true, //mandatory, 
@@ -14,12 +16,12 @@ const reviweSchema = mongoose.Schema({
     },
     reviewedAt:{
         type:Date, 
-        reduire:true//mandatory
+        reduired:true//mandatory
     },
     rating:{
         type:Number, 
-        min: 1,
-        max: 5,
+        // min: 1,
+        // max: 5,
         required:true// mandatory
     },
     review: {
@@ -33,3 +35,6 @@ const reviweSchema = mongoose.Schema({
   })
 
   module.exports = mongoose.model('review', reviweSchema )
+
+
+  

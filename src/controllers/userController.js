@@ -1,27 +1,40 @@
 const userModel = require("../models/userModel")
-const validator= require("../validator/validator")
+const validator = require("../validator/validator")
 
 
 
-const createUser = async (req, res)=> {
-    try{
+const createUser = async (req, res) => {
+    try {
         const data = req.body;
-        if (Object.keys(data) == 0){return res.status(400).send({ status: false, msg: "Bad request, No data provided." })};
 
-        const{title, name, phone, email, password} = data;
+        if (Object.keys(data) == 0) { return res.status(400).send({ status: false, msg: "Bad request, No data provided." }) };
+        if (!validator.isValid(data.title)) { return res.status(400).send({ status: false, msg: "title is required" }) }
+        if (!validator.isValid(data.name)) { return res.status(400).send({ status: false, msg: "name is required" }) }
+        if (!validator.isValid(data.phone)) { return res.status(400).send({ status: false, msg: "phone is required" }) }
+        if (!validator.isValid(data.email)) { return res.status(400).send({ status: false, msg: "email is required" }) }
+        if (!validator.isValid(data.password)) { return res.status(400).send({ status: false, msg: "password is required" }) }
 
-         // For name required true:
-         if (!validator.isValid(title)){ return res.status(400).send({ status: false, msg: "Title is required" }) }
 
-    
-        userCreated = await userModel.create(data);
-    
-        res.status(201).send({status: true, message:"User created successfully", data:data})
-    }  catch (error) {
+        if (!/^([+]\d{2})?\d{10}$/.test(data.phone)) return res.status(400).send({ status: false, msg: "please provide a valid moblie Number" });
+        if (!/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email)) return res.status(400).send({ status: false, msg: "Please provide a valid email" });
+        if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(data.password))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
+        // ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$
+
+        let duplicateNumber = await userModel.findOne({ phone: data.phone })
+        if (duplicateNumber) return res.status(400).send({ status: false, msg: 'number already exist' })
+
+        let duplicateEmail = await userModel.findOne({ email: data.email })
+        if (duplicateEmail) return res.status(400).send({ status: false, msg: 'email already exist' })
+
+        let userCreated = await userModel.create(data);
+        res.status(201).send({ status: true, message: "User created successfully", data: userCreated })
+
+
+    } catch (error) {
         console.log(error)
         return res.status(500).send({ msg: error.message })
     }
-   
+
 }
 
-module.exports.createUser=createUser
+module.exports.createUser = createUser

@@ -8,9 +8,10 @@ const reviweSchema = mongoose.Schema({
     },
     reviewedBy:{
         type:String, 
-        required:true,//mandatory,
+        // required:true,//mandatory,
         default: 'Guest',
-        value: "reviewer's name"},
+        //value: "reviewer's name"
+    },
     reviewedAt:{
         type:Date, 
         reduire:true//mandatory
@@ -30,3 +31,5 @@ const reviweSchema = mongoose.Schema({
         default: false
     },
   })
+
+  module.exports = mongoose.model('review', reviweSchema )

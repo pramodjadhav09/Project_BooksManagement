@@ -4,9 +4,9 @@ const validator = require("../validator/validator")
 
 const login = async function (req, res) {
     try {
-        const email = req.body.email
-        const password = req.body.password
         const data = req.body
+
+        const {email,password}=data;
 
         if (Object.keys(data) == 0) return res.status(400).send({ status: false, msg: "Bad Request, No data provided" })
 

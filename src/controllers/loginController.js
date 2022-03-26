@@ -11,10 +11,20 @@ const login = async function (req, res) {
         if (Object.keys(data) == 0) return res.status(400).send({ status: false, msg: "Bad Request, No data provided" })
      
         // For email required in body :
-        if (!validator.isValid(email)) { return res.status(400).send({ status: false, msg: "Email is required" }) }
+        if (!validator.isValid(email)) { return res.status(400).send({ status: false, msg: "Email is required" }) };
+        
+        // For a valid email:
+        if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email))){
+            return res.status(400).send({ status:false, msg: "Please enter a valid Email."})
+        };
 
         // For password required in body :
-        if (!validator.isValid(password)) { return res.status(400).send({ status: false, msg: "Password is required" }) }
+        if (!validator.isValid(password)) { return res.status(400).send({ status: false, msg: "Password is required" }) };
+
+        // For password validation, should be 8 to 15 character :
+        if(!((password).trim().length>=8)&&((password).trim().length<=15)){
+            return res.status(400).send({status:false,msg :"Check Your Password, It should be 8 to 15 characters."})
+        }
 
         // Finding the User in Data-Base :
         const userMatch = await userModel.findOne({ email: email, password: password })

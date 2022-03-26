@@ -4,18 +4,18 @@ const validator = require("../validator/validator")
 
 const login = async function (req, res) {
     try {
-        const email = req.body.email
-        const password = req.body.password
-        // const data = req.body
-        // if (Object.keys(data) == 0) return res.status(400).send({ status: false, msg: "Bad Request, No data provided" })
+        // const email = req.body.email
+        // const password = req.body.password
+        const data = req.body
+        if (Object.keys(data) == 0) return res.status(400).send({ status: false, msg: "Bad Request, No data provided" })
         // For email required in body :
-        if (!validator.isValid(email)) { return res.status(400).send({ status: false, msg: "Email is required" }) }
+        if (!validator.isValid(data.email)) { return res.status(400).send({ status: false, msg: "Email is required" }) }
 
         // For password required in body :
-        if (!validator.isValid(password)) { return res.status(400).send({ status: false, msg: "Password is required" }) }
+        if (!validator.isValid(data.password)) { return res.status(400).send({ status: false, msg: "Password is required" }) }
 
         // Finding the User in Data-Base :
-        const userMatch = await userModel.findOne({ email: email, password: password })
+        const userMatch = await userModel.findOne({ email: data.email, password: data.password })
         if (!userMatch) return res.status(400).send({ status: false, msg: "Email or Password is incorrect" })
 
         // If user found, then token will generate :

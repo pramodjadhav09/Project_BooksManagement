@@ -9,7 +9,7 @@ const login = async function (req, res) {
         const {email,password}=data;
 
         if (Object.keys(data) == 0) return res.status(400).send({ status: false, msg: "Bad Request, No data provided" })
-
+     
         // For email required in body :
         if (!validator.isValid(email)) { return res.status(400).send({ status: false, msg: "Email is required" }) }
 
@@ -23,11 +23,9 @@ const login = async function (req, res) {
         // If user found, then token will generate :
         const token = jwt.sign({
             userId: userMatch._id.toString(),
-            iat: Math.floor(Date.now / 1000),
-            exp: Math.floor(Date.now / 1000) + 10 * 60 * 60,
-            batch: "thorium",
-            groupNo: "19",
-        }, "Group-19")
+            batch:"Thorium",
+            groupNo:"19"
+        }, "Group-19", {expiresIn: "2m" })
 
         res.setHeader("x-api-key", token);
         return res.status(200).send({ status: true, msg: "You are successfully logged in", token })

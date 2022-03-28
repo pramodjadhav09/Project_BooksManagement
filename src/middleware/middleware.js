@@ -9,6 +9,7 @@ const authentication = async function (req, res, next) {
         // Checking the token :
         let decodedtoken = jwt.verify(token, "Group-19")
         if (!decodedtoken) return res.status(401).send({ status: false, msg: "token is invalid" })
+        req.decodedtoken = decodedtoken
         next();
     }
     catch (error) {

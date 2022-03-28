@@ -1,7 +1,7 @@
-const bookModel = require('../models/booksModel');
+const booksModel = require('../models/booksModel');
 const validator = require("../validator/validator")
 const userModel = require("../models/userModel");
-const booksModel = require('../models/booksModel');
+// const booksModel = require('../models/booksModel');
 
 
 let createBook = async function (req, res) {
@@ -16,17 +16,15 @@ let createBook = async function (req, res) {
     if (!validator.isValid(data.subcategory)) {return res.status(400).send({ status: false, message: "Subcategory Is Required" })}
     // if(typeof data.ISBN != Number || data.ISBN >10 || data.ISBN < 10) return res.status(400).send({status:false, msg:"Enter valid ISBN"}) 
     
-    const duplicteTitle = await bookModel.findOne({title:data.title})
+    const duplicteTitle = await booksModel.findOne({title:data.title})
     if (duplicteTitle) {return res.status(404).send({ status: false, message: "title already exists, title must be unique" })}
-    const duplicateISBN = await bookModel.findOne({ISBN:data.ISBN})
+    const duplicateISBN = await booksModel.findOne({ISBN:data.ISBN})
     console.log(duplicateISBN)
     if (duplicateISBN) {return res.status(404).send({ status: false, message: "ISBN already exists, ISBN must be unique" })}
 
-    let savedData = await bookModel.create(data)
+    let savedData = await booksModel.create(data)
     res.status(201).send({status:true, msg:'created book sucssesfully',data:savedData})
-
 }
-
 catch (error) {
     // console.log(error)
     return res.status(500).send({ msg: error.message })
@@ -46,12 +44,10 @@ let getBook = async function (req, res){
        const data = req.query
    
        const filter = { isDeleted: false, ...data }
-       console.log(filter)
    
-       const book = await bookModel.find(filter).select({_id:1, title:1,excerpt:1,userId:1,category:1,releasedAt:1,reviews:1})
-       if (book.length === 0) {
-         return res.status(404).send({ status: false, ERROR: "No book found according to the query" })
-       }
+       const book = await booksModel.find(filter).select({_id:1, title:1,excerpt:1,userId:1,category:1,releasedAt:1,reviews:1}).sort({title:1})
+       if (book.length === 0) {return res.status(404).send({ status: false, ERROR: "No book found according to the query" })}
+
        return res.status(200).send({ status: true, book: book })
      }
    
@@ -90,9 +86,86 @@ const updateBooks = async (req, res) => {
 
 
 
+let deleteBook = async function (req, res) {
+
+    try {
+      let id = req.params.bookId
+      console.log(id)
+
+      if (id) {
+        
+
+        //   let check= await booksModel.findOne({_id:id})
+        //   if(!check) {return res.status(400).send({status:false, msg:"book not found"})}
+        let blogToBeDeleted = await booksModel.findById(id)
+        if (blogToBeDeleted.isDeleted == true) { return res.status(400).send({ status: false, msg: "Books has already been deleted" }) }
+        if (blogToBeDeleted) {
+        //   if (blogToBeDeleted.authorId == req.decodedToken.authId) {
+  
+  
+            let deletedBlog = await booksModel.findOneAndUpdate({ _id: id },
+              { $set: { isDeleted: true, deletedAt: Date.now() } })
+  
+            return res.status(200).send({ Status: "Requested book has been deleted." })
+  
+        //   } else { return res.status(403).send({ ERROR: "Author is not authorised to delete requested blog" }) }
+  
+  
+        } else { return res.status(404).send({ ERROR: "book to be deleted not found" }) }
+  
+      } else { return res.status(400).send({ ERROR: 'BAD REQUEST' }) }
+  
+  
+    }
+    catch (err) { return res.status(500).send({ ERROR: err.message }) }
+  
+  
+  }
+
+
+// let deleteBook = async function (req, res){
+//     try{
+//     let data = req.params.bookId;
+//     console.log(data)
+//         if(Object.keys(data)== 0){ return res.status(400).send({status:false, msg:"BAD REQUEST"})}
+//           if (!validator.isValid(data)) { return res.status(400).send({ ERROR: 'BAD REQUEST' }) }
+//           console.log("gyug")
+
+//             let bookToBeDeleted = await booksModel.findOne({_id:data})
+
+//             console.log(bookToBeDeleted)
+//             if (!bookToBeDeleted) { return res.status(404).send({ ERROR: "Blog to be deleted not found" }) }
+//             if (bookToBeDeleted.isDeleted == true) { return res.status(400).send({ status: false, msg: "Blog has already been deleted" }) }
+            
+//             //   if (bookToBeDeleted.authorId == req.decodedToken.authId) {
+      
+      
+//                 let deleted = await booksModel.findOneAndUpdate({ _id: data },
+//                   { $set: { isDeleted: true, deletedAt: Date.now() } })
+      
+//                 return res.status(200).send({ Status: "Requested blog has been deleted." })
+      
+//             //   } else { return res.status(403).send({ ERROR: "Author is not authorised to delete requested blog" }) }
+      
+      
+           
+      
+          
+      
+      
+//         }
+//         catch (err) { return res.status(500).send({ ERROR: err.message }) }
+      
+      
+//       }
+
+
+
 
 
 
 module.exports.createBook =createBook
 module.exports.getBook =getBook
 module.exports.updateBooks = updateBooks
+module.exports.deleteBook = deleteBook
+

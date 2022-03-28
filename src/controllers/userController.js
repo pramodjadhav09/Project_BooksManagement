@@ -13,19 +13,15 @@ const createUser = async (req, res) => {
         if (!validator.isValid(data.password)) { return res.status(400).send({ status: false, msg: "password is required" }) }
 
         // console.log(data.email)
+        let arr = ["Mr","Miss","Mrs"]
+       let titleCheck = arr.indexOf(data.title.trim())
+       
 
-
-<<<<<<< HEAD
-        if (!(/^([+]\d{2})?\d{10}$/.test(data.phone))) return res.status(400).send({ status: false, msg: "please provide a valid moblie Number" });
-        if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email.trim()))) return res.status(400).send({ status: false, msg: "Please provide a valid email" });
-        if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(data.password))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
-        // ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$
-=======
+        if (titleCheck === -1) return res.status(400).send({status:false, msg:'title not valid'})
         if (!(/^([+]\d{2})?\d{10}$/.test(data.phone.trim()))) return res.status(400).send({ status: false, msg: "please provide a valid moblie Number" });
         if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email.trim()))) return res.status(400).send({ status: false, msg: "Please provide a valid email" });
         if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(data.password.trim()))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
 
->>>>>>> 59b201e5bd49e00a8b534705bac9687b545800d2
 
         let duplicateNumber = await userModel.findOne({ phone: data.phone })
         if (duplicateNumber) return res.status(400).send({ status: false, msg: 'number already exist' })

@@ -17,12 +17,19 @@ const createUser = async (req, res) => {
        let titleCheck = arr.indexOf(data.title.trim())
        
 
+<<<<<<< HEAD
         if (titleCheck === -1) return res.status(400).send({status:false, msg:'title not valid'})
+=======
+
+>>>>>>> 25b5ddbd7266f40e68f841d9bbb5f2bba62ca7e7
         if (!(/^([+]\d{2})?\d{10}$/.test(data.phone.trim()))) return res.status(400).send({ status: false, msg: "please provide a valid moblie Number" });
         if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email.trim()))) return res.status(400).send({ status: false, msg: "Please provide a valid email" });
         if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(data.password.trim()))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 25b5ddbd7266f40e68f841d9bbb5f2bba62ca7e7
         let duplicateNumber = await userModel.findOne({ phone: data.phone })
         if (duplicateNumber) return res.status(400).send({ status: false, msg: 'number already exist' })
 

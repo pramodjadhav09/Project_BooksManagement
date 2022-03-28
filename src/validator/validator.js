@@ -5,4 +5,10 @@ const isValid = function (value) {
     return true
 }
 
-module.exports.isValid = isValid; 
+const check = function (value) {
+    if (typeof (value) == "undefined") return false
+    return true;
+}
+
+module.exports.isValid = isValid;
+module.exports.check = check;

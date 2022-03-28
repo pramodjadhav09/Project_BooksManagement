@@ -46,20 +46,20 @@ let getBook = async function (req, res){
        const data = req.query
    
        const filter = { isDeleted: false, ...data }
-       console.log(filter)
+       //console.log(filter)
    
-       const book = await bookModel.find(filter).select({_id:1, title:1,excerpt:1,userId:1,category:1,releasedAt:1,reviews:1})
+       const book = await bookModel.find(data).select({_id:1, title:1,excerpt:1,userId:1,category:1,releasedAt:1,reviews:1})
+       //const newbook= book.sort({title:1})
        if (book.length === 0) {
          return res.status(404).send({ status: false, ERROR: "No book found according to the query" })
        }
-       return res.status(200).send({ status: true, book: book })
+       return res.status(200).send({ status: true, data: newbook })
      }
-   
+
      catch (err) {
        return res.status(500).send({ ERROR: err.message })
      }
    } 
-
 
 
 
@@ -95,4 +95,5 @@ const updateBooks = async (req, res) => {
 
 module.exports.createBook =createBook
 module.exports.getBook =getBook
+
 module.exports.updateBooks = updateBooks

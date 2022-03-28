@@ -62,7 +62,6 @@ let getBook = async function (req, res) {
 
 
 
-
 //UPDATE BOOKS:-
 
 
@@ -119,9 +118,6 @@ const getBooksById = async function (req, res) {
 }
 
 module.exports.getBooksById = getBooksById
-
-
-
 module.exports.createBook = createBook
 module.exports.getBook = getBook
 module.exports.updateBooks = updateBooks

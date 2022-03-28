@@ -1,6 +1,7 @@
 const bookModel = require('../models/booksModel');
 const validator = require("../validator/validator")
-const userModel = require("../models/userModel")
+const userModel = require("../models/userModel");
+const booksModel = require('../models/booksModel');
 
 
 let createBook = async function(req, res){
@@ -53,6 +54,18 @@ catch (error) {
 
 
 
+//GETBOOKS-
 
 
+const getBooks= async function (req, res){
+    data= await bookModel.find({isDeleted:false}).select({_id:1, title:1,excerpt:1,
+        userId:1,category:1,releasedAt:1,reviews:1})
+
+    res.status(200).send({status:true, data:data})
+}
+
+
+
+
+module.exports.getBooks=getBooks
 module.exports.createBook =createBook

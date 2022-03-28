@@ -14,7 +14,7 @@ const login = async function (req, res) {
         if (!validator.isValid(email)) { return res.status(400).send({ status: false, msg: "Email is required" }) };
         
         // For a valid email:
-        if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email))){return res.status(400).send({ status:false, msg: "Please enter a valid Email."})};
+        if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email.trim()))){return res.status(400).send({ status:false, msg: "Please enter a valid Email."})};
         // For a valid password:
         if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(data.password))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
 

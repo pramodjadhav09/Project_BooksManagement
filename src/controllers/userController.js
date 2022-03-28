@@ -14,10 +14,12 @@ const createUser = async (req, res) => {
         if (!validator.isValid(data.email)) { return res.status(400).send({ status: false, msg: "email is required" }) }
         if (!validator.isValid(data.password)) { return res.status(400).send({ status: false, msg: "password is required" }) }
 
+        // console.log(data.email)
+
 
         if (!(/^([+]\d{2})?\d{10}$/.test(data.phone))) return res.status(400).send({ status: false, msg: "please provide a valid moblie Number" });
-        if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email))) return res.status(400).send({ status: false, msg: "Please provide a valid email" });
-        if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(data.password))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
+        if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email.trim()))) return res.status(400).send({ status: false, msg: "Please provide a valid email" });
+        if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(data.password))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
         // ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$
 
         let duplicateNumber = await userModel.findOne({ phone: data.phone })

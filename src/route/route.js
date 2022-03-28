@@ -10,6 +10,7 @@ const { authentication } = require('../middleware/middleware');
 router.post("/register", userController.createUser)
 router.post("/login",loginController.login)
 router.post("/book", bookController.createBook)
+router.get("/books",bookController.getBook)
 
 
 module.exports = router;

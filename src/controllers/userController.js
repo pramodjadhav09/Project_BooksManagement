@@ -1,8 +1,6 @@
 const userModel = require("../models/userModel")
 const validator = require("../validator/validator")
 
-
-
 const createUser = async (req, res) => {
     try {
         const data = req.body;
@@ -14,11 +12,12 @@ const createUser = async (req, res) => {
         if (!validator.isValid(data.email)) { return res.status(400).send({ status: false, msg: "email is required" }) }
         if (!validator.isValid(data.password)) { return res.status(400).send({ status: false, msg: "password is required" }) }
 
+        // console.log(data.email)
+
 
         if (!(/^([+]\d{2})?\d{10}$/.test(data.phone.trim()))) return res.status(400).send({ status: false, msg: "please provide a valid moblie Number" });
-        if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email))) return res.status(400).send({ status: false, msg: "Please provide a valid email" });
-        if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(data.password))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
-        // ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$
+        if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email.trim()))) return res.status(400).send({ status: false, msg: "Please provide a valid email" });
+        if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(data.password.trim()))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
 
         let duplicateNumber = await userModel.findOne({ phone: data.phone })
         if (duplicateNumber) return res.status(400).send({ status: false, msg: 'number already exist' })
@@ -29,9 +28,9 @@ const createUser = async (req, res) => {
         let userCreated = await userModel.create(data);
         res.status(201).send({ status: true, message: "User created successfully", data: userCreated })
 
-
-    } catch (error) {
-        console.log(error)
+    }
+    catch (error) {
+        // console.log(error)
         return res.status(500).send({ msg: error.message })
     }
 

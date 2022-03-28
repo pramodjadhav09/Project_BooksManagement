@@ -16,7 +16,7 @@ const createUser = async (req, res) => {
         if (!(/^([+]\d{2})?\d{10}$/.test(data.phone.trim()))) return res.status(400).send({ status: false, msg: "please provide a valid moblie Number" });
         if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email.trim()))) return res.status(400).send({ status: false, msg: "Please provide a valid email" });
         if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/.test(data.password.trim()))) { return res.status(400).send({ status: false, msg: "please provide a valid password with one uppercase letter ,one lowercase, one character and one number " }) }
-       
+
 
         let duplicateNumber = await userModel.findOne({ phone: data.phone })
         if (duplicateNumber) return res.status(400).send({ status: false, msg: 'number already exist' })

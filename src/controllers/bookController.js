@@ -98,4 +98,4 @@ const updateBooks = async (req, res) => {
 
 module.exports.createBook = createBook
 module.exports.getBooks = getBooks
-module.exports.updateBooks=updateBooks
+module.exports.updateBooks = updateBooks

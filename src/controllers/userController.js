@@ -12,6 +12,8 @@ const createUser = async (req, res) => {
         if (!validator.isValid(data.email)) { return res.status(400).send({ status: false, msg: "email is required" }) }
         if (!validator.isValid(data.password)) { return res.status(400).send({ status: false, msg: "password is required" }) }
 
+        // console.log(data.email)
+
 
         if (!(/^([+]\d{2})?\d{10}$/.test(data.phone.trim()))) return res.status(400).send({ status: false, msg: "please provide a valid moblie Number" });
         if (!(/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(data.email.trim()))) return res.status(400).send({ status: false, msg: "Please provide a valid email" });

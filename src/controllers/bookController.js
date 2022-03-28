@@ -1,8 +1,8 @@
 const bookModel = require('../models/booksModel');
 const validator = require("../validator/validator")
 const userModel = require("../models/userModel");
-const booksModel = require('../models/booksModel');
-
+// const booksModel = require('../models/booksModel');
+// const mongoose = require('mongoose')
 
 let createBook = async function (req, res) {
     try {
@@ -77,8 +77,11 @@ const updateBooks = async (req, res) => {
         if (book.isDeleted == true) { return res.status(400).send({ status: false, msg: "book is already deleted." }) }
 
         let data = req.body
+
+        if(Object.keys(data)==0){return res.status(400).send({status:false,msg:"Pls, provide some data to update."})}
+
         let updatedBooks = await booksModel.findOneAndUpdate({ _id: book_Id },
-            { $set: { title: data.title, excerpt: data.excerpt, releasedAt: data.releasedAt, ISBN: data.ISBN } }, { new: true })
+            { $set: { title: data.title, excerpt: data.excerpt, releasedAt: data.releasedAt, ISBN: data.ISBN} }, { new: true })
         return res.status(201).send({ status: true, updatedBooks: updatedBooks })
     }
     catch (error) {
@@ -89,7 +92,33 @@ const updateBooks = async (req, res) => {
 }
 
 
+/// get books by id
+const getBooksById=async function(req,res){
+    try{
+data=req.params.BookId
+if(Object.keys(data).length==0){
+    return res.status(400).send({status:false,msg:"book id req"})
+}
+// id=_id.BookId
+let findbook= await bookModel.findOne({BookId:data.BookId})
+if(!findbook){
+    return res.status(404).send({status:true,msg:"book not found"})
+}
+// return res.status(200).send({status:true,data:findbook})
+let findreviews = await bookModel.find({BookId:data.BookId,isDeleted:false}).select({title:1,email:1,mobile:1})
+if(findreviews.length ==0){
+    data.reviews = "no reviews found"
+    return res.status(200).send({status:false,msg:data})
+}
+data.reviews = findreviews
+return res.status(200).send({status:true,data:findbook})}
+catch(error) {
+    console.log(error)
+    return res.status(500).send({ msg: error.message })
+}
+}
 
+module.exports.getBooksById=getBooksById
 
 
 

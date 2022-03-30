@@ -30,7 +30,7 @@ const login = async function (req, res) {
             userId: userMatch._id.toString(),
             batch:"Thorium",
             groupNo:"19"
-        }, "Group-19", {expiresIn: "2m" })
+        }, "Group-19", {expiresIn: "30m" })
 
         res.setHeader("x-api-key", token);
         return res.status(200).send({ status: true, msg: "You are successfully logged in", token })

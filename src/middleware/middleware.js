@@ -17,4 +17,16 @@ const authentication = async function (req, res, next) {
     }
 }
 
+let authorization = async function (req, res, next) {
+
+    let token = req.headers["for-check"];
+    let decodedtoken = jwt.verify(token, "Group-19")
+    let getUserId = req.body.userId;
+    let Userid = req.params.userId;
+    if (decodedtoken.userId != (getUserId || Userid)) { return res.status(400).send({ status: false, msg: "user not valid" }) }
+    next()
+}
+
 module.exports.authentication = authentication
+
+module.exports.authorization = authorization

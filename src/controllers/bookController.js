@@ -1,6 +1,7 @@
 const booksModel = require('../models/booksModel');
 const validator = require("../validator/validator")
 const userModel = require("../models/userModel");
+const reviewModel = require('../models/reviewModel')
 // const booksModel = require('../models/booksModel');
 // const mongoose = require('mongoose')
 
@@ -115,6 +116,7 @@ const getBooksById = async function (req, res) {
 
 
     let data = req.params.bookId;
+    console.log(data)
 
     //getting book data with bookId
     let getBooksData = await booksModel.findOne({_id:data},{isDeleted:false});
@@ -127,6 +129,7 @@ const getBooksById = async function (req, res) {
 
     //adding review data as a key in object
     let bookWithReviews = JSON.parse(JSON.stringify(getBooksData));
+    // console.log(bookWithReviews)
     bookWithReviews.reviewsData=reviews
 
     

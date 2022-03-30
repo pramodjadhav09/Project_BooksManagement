@@ -88,15 +88,17 @@ const updateBooks = async (req, res) => {
 const getBooksById = async function (req, res) {
 
     let data = req.params.bookId;
+    //console.log(data)
 
     //getting book data with bookId
     let getBooksData = await booksModel.findOne({ _id: data }, { isDeleted: false });
+    //console.log(getBooksData);
 
     //res.status(200).send({ status: true, data: getBooksData })
 
     //getting review data
     let reviews = await reviewModel.find({ bookId: data }).select({ bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
-
+    //console.log(reviews);
 
     //adding review data as a key in object
     let bookWithReviews = JSON.parse(JSON.stringify(getBooksData));

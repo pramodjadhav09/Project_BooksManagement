@@ -3,7 +3,7 @@ const reviewModel = require("../models/reviewModel")
 const validator = require("../validator/validator")
 
 
-
+//CREATEREVIEW-
 
 const createReview = async function (req, res) {
 
@@ -45,5 +45,29 @@ const createReview = async function (req, res) {
 }
 
 
+//UPDATEREVIEW-
+
+
+const updateReviews = async function (req, res) {
+    let getBookId = req.params.bookId;
+    let getReviewId = req.params.reviewId
+    let data = req.body;
+
+    // let checkBookId = await booksModel.findOne({ _id: getBookId }, { isDeleted: false })
+    // if (!checkBookId) { return res.status(400).send({ status: false, message: "no book exist with this id" }) }
+    // let checkReviewId = await reviewModel.findOne({ _id: getReviewId }, { isDeleted: false })
+    // if (!checkReviewId) { return res.status(400).send({ status: false, message: "no review exist with this id" }) }
+
+    let updateReview = await reviewModel.findOneAndUpdate({ _id: getReviewId, bookId: getBookId },
+        { $set: { review: data.review, rating: data.rating, reviewedBy: data.reviewedBy } }, { new: true })
+
+    return res.status(200).send({ status: true, message: "review updated successfully", data: updateReview })
+
+}
+
+
+
+
 
 module.exports.createReview = createReview
+module.exports.updateReviews = updateReviews

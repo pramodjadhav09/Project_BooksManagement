@@ -114,7 +114,7 @@ let deleteBook = async function (req, res) {
 
         let deletedBooks = await booksModel.findOneAndUpdate({ _id: bookId },
             { $set: { isDeleted:true} }, { new: true })
-        return res.status(201).send({ status: true, msg: "Book Deleted Successfully",deletedBooks: deletedBooks })
+        return res.status(201).send({ status: true, msg: "Book Deleted Successfully" })
     }
     catch (err) { return res.status(500).send({ status: false, message: err.message }) }
 }

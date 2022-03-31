@@ -1,4 +1,5 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const booksModel = require("../models/booksModel");
 
 const authentication = async function (req, res, next) {
     try {
@@ -21,12 +22,13 @@ let authorization = async function (req, res, next) {
 
     let token = req.headers["for-check"];
     let decodedtoken = jwt.verify(token, "Group-19")
-    let getUserId = req.body.userId;
-    let Userid = req.params.userId;
-    if (decodedtoken.userId != (getUserId || Userid)) { return res.status(400).send({ status: false, msg: "user not valid" }) }
+
+    let bookId = req.params.bookId;
+    let book=await booksModel.findById(bookId)
+    
+    if (decodedtoken.userId != book.userId) { return res.status(400).send({ status: false, msg: "You are not authorised" }) }
     next()
 }
 
 module.exports.authentication = authentication
-
 module.exports.authorization = authorization

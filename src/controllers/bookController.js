@@ -1,9 +1,6 @@
 const booksModel = require('../models/booksModel');
 const validator = require("../validator/validator")
-const userModel = require("../models/userModel");
 const reviewModel = require("../models/reviewModel")
-// const booksModel = require('../models/booksModel');
-// const mongoose = require('mongoose')
 
 
 //CREATEBOOK-
@@ -42,8 +39,6 @@ let getBook = async function (req, res) {
     try {
 
         const data = req.query
-        // const filter = { isDeleted: false, ...data }
-
         const book = await booksModel.find(data, { isDeleted: false }).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).collation({ locale: "en" }).sort({ title: 1 })
         if (book.length === 0) {
             return res.status(404).send({ status: false, message: "No book found according to your search" })
@@ -65,6 +60,7 @@ const updateBooks = async (req, res) => {
         if (Object.keys(data) == 0) { return res.status(400).send({ status: false, msg: "Pls, provide some data to update." }) }
         let book = await booksModel.findById(book_Id)
         let dataDup = await booksModel.findOne({ title: data.title })
+        // if ((book!=dataDup)&&dataDup) return res.status(400).send({ status: false, msg: "title cannot be duplicate" })
         if (dataDup) return res.status(400).send({ status: false, msg: "title cannot be duplicate" })
         let ISBNDup = await booksModel.findOne({ ISBN: data.ISBN })
         if (ISBNDup) return res.status(400).send({ status: false, msg: "ISBN cannot be duplicate" })
@@ -85,32 +81,16 @@ const updateBooks = async (req, res) => {
 
 const getBooksById = async function (req, res) {
 
-    let data = req.params.bookId;
-    //console.log(data)
+    let bookId = req.params.bookId;
 
-    //getting book data with bookId
-    let books = await booksModel.findOne({ _id: data }, { isDeleted: false });
+    let books = await booksModel.findOne({ _id: bookId }, { isDeleted: false });
     if (!books) return res.status(404).send({ status: false, message: "No book found according to your search" })
-    // console.log(getBooksData);
-
-    //res.status(200).send({ status: true, data: getBooksData })
-
-    //getting review data
-    let reviews = await reviewModel.find({ bookId: data }).select({ bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
-    //console.log(reviews);
-
-    //adding review data as a key in object DEEP COPY
-    // let bookWithReviews = JSON.parse(JSON.stringify(getBooksData));
-    // bookWithReviews.reviewsData = reviews
-
-
-    //adding review data as a key in object SHALLOW COPY
-    let bookWithReviews = { books, reviews }
-    if (reviews.length == 0) {
-        return res.status(200).send({ status: true, message: 'Books list', data: bookWithReviews, msg: "No reviwes yet" });
-    }
-
-    return res.status(200).send({ status: true, message: 'Books list', data: bookWithReviews });
+    
+    let reviews = await reviewModel.find({ bookId: bookId ,isDeleted: false}).select({ bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
+    let bookWithReviews = JSON.parse(JSON.stringify(books));
+    bookWithReviews.reviewsData = reviews
+    
+    return res.status(200).send({ status: true, message: 'Books list',totalReviews:reviews.length, data: bookWithReviews });
 
 }
 
@@ -123,15 +103,11 @@ let deleteBook = async function (req, res) {
     try {
         let id = req.params.bookId
 
-        // if (!id) { return res.status(400).send({ status: false, message: 'BAD REQUEST' }) }
         let blogToBeDeleted = await booksModel.findById(id)
         if (blogToBeDeleted.isDeleted == true) { return res.status(400).send({ status: false, msg: "Books has already been deleted" }) }
         if (!blogToBeDeleted) { return res.status(404).send({ status: false, message: "book to be deleted not found" }) }
-        let deletedBook = await booksModel.findOneAndUpdate({ _id: id },
-            { $set: { isDeleted: true, deletedAt: Date.now() } })
 
         let deleted = await booksModel.findOne({ _id: id, isDeleted: true })
-
         return res.status(200).send({ Status: true, messsage: "Requested book has been deleted.", data: deleted })
 
     }

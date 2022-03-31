@@ -17,6 +17,10 @@ router.delete("/books/:bookId", bookController.deleteBook)
 router.post("/books/:bookId/review", reviewController.createReview)
 router.put("/books/:bookId/review/:reviewId",reviewController.updateReviews)
 router.delete("/books/:bookId/review/:reviewId",reviewController.deleteReview)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 61fbb1bcc962087610e7721bf6844efb4c7c915d
 
 
 

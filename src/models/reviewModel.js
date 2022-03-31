@@ -4,7 +4,6 @@ const objectId = mongoose.Schema.Types.ObjectId
 
 
 const reviewSchema = new mongoose.Schema({
-
     bookId :{ 
         type:objectId,
         required:true,

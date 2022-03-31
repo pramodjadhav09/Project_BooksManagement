@@ -40,7 +40,7 @@ const updateReviews = async (req, res) => {
         if (!book) { return res.status(400).send({ status: false, message: "No book exist with this id" }) }
         
         let checkReviewId = await reviewModel.findOne({ _id: reviewId }, { isDeleted: false })
-        if (!checkReviewId) { return res.status(400).send({ status: false, message: "No review exist with this id" }) }
+        if (checkReviewId) { return res.status(400).send({ status: false, message: "No review exist with this id" }) }
 
         let updateReview = await reviewModel.findOneAndUpdate({ _id: reviewId, bookId: bookId },
             { $set: { review: data.review, rating: data.rating, reviewedBy: data.reviewedBy, reviewedAt: Date.now() } }, { new: true })

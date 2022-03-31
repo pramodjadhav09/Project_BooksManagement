@@ -17,9 +17,9 @@ router.get("/books/:bookId", middleware.authentication, bookController.getBooksB
 router.put("/books/:bookId", middleware.authentication, middleware.authorization, bookController.updateBooks)
 router.delete("/books/:bookId", middleware.authentication, middleware.authorization, bookController.deleteBook)
 
-router.post("/books/:bookId/review", reviewController.createReview)
-router.put("/books/:bookId/review/:reviewId",  reviewController.updateReviews)
-router.delete("/books/:bookId/review/:reviewId",  reviewController.deleteReview)
+router.post("/books/:bookId/review",middleware.authentication, reviewController.createReview)
+router.put("/books/:bookId/review/:reviewId",  middleware.authentication,reviewController.updateReviews)
+router.delete("/books/:bookId/review/:reviewId", middleware.authentication, reviewController.deleteReview)
 
 
 

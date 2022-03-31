@@ -19,7 +19,7 @@ const createReview = async (req, res) => {
         if (!book) { return res.status(400).send({ status: false, message: "No book exist with this id" }) }
 
         let createData = await reviewModel.create(data);
-        return res.send({ status: true, message: "Review successfully created", data: createData })
+        return res.status(201).send({ status: true, message: "Review successfully created", data: createData })
     }
     catch (error) {
         return res.status(500).send({ status: false, error: error.message })

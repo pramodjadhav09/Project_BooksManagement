@@ -25,7 +25,7 @@ let authorization = async function (req, res, next) {
         let book = await booksModel.findById(bookId)
         if(!book){return res.status(400).send({ status: false, msg: "There is no data inside the database with this id" }) }
 
-        if (decodedtoken.userId != book.userId) { return res.status(400).send({ status: false, msg: "You are not authorised" }) }
+        if (decodedtoken.userId != book.userId) { return res.status(403).send({ status: false, msg: "You are not authorised" }) }
         next()
     }
     catch (error) {

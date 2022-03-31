@@ -18,7 +18,7 @@ const login = async function (req, res) {
         if (!userMatch) return res.status(400).send({ status: false, msg: "Email or Password is incorrect" })
 
         const token = jwt.sign({
-            userId: userMatch._id.toString(),
+            userId: userMatch._id,
             batch:"Thorium",
             groupNo:"19"
         }, "Group-19", {expiresIn: "30m" })

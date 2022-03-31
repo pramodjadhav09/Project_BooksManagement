@@ -86,7 +86,7 @@ const getBooksById = async function (req, res) {
     try {
         let bookId = req.params.bookId;
 
-        let books = await booksModel.findOne({ _id: bookId }, { isDeleted: false });
+        let books = await booksModel.findOne({ _id: bookId, isDeleted: false });
         if (!books) return res.status(404).send({ status: false, message: "No book found according to your search" })
 
         let reviews = await reviewModel.find({ bookId: bookId, isDeleted: false }).select({ bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })

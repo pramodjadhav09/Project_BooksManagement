@@ -108,12 +108,13 @@ let deleteBook = async function (req, res) {
     try {
         let bookId = req.params.bookId
 
-        let blogToBeDeleted = await booksModel.findById(bookId)
-        if (blogToBeDeleted.isDeleted == true) { return res.status(400).send({ status: false, msg: "Books has already been deleted" }) }
-        if (!blogToBeDeleted) { return res.status(404).send({ status: false, message: "Which book you want to delete is not found" }) }
+        let book = await booksModel.findById(bookId)
+        if (!book) { return res.status(404).send({ status: false, message: "Which book you want to delete is not found" }) }
+        if (book.isDeleted == true) { return res.status(400).send({ status: false, msg: "Books has already been deleted" }) }
 
-        let deleted = await booksModel.findOne({ _id: bookId, isDeleted: true })
-        return res.status(200).send({ Status: true, messsage: "Requested book has been deleted.", data: deleted })
+        let deletedBooks = await booksModel.findOneAndUpdate({ _id: bookId },
+            { $set: { isDeleted:true} }, { new: true })
+        return res.status(201).send({ status: true, msg: "Book Deleted Successfully",deletedBooks: deletedBooks })
     }
     catch (err) { return res.status(500).send({ status: false, message: err.message }) }
 }

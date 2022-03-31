@@ -22,6 +22,7 @@ let authorization = async function (req, res, next) {
         let token = req.headers["group19"];
         let decodedtoken = jwt.verify(token, "Group-19")
         let bookId = req.params.bookId;
+        // console.log(bookId)
         let book = await booksModel.findById(bookId)
         if(!book){return res.status(404).send({ status: false, msg: "There is no data inside the database with this id" }) }
 

@@ -5,7 +5,7 @@ const userController = require("../controllers/userController")
 const loginController = require("../controllers/loginController");
 const bookController = require("../controllers/bookController")
 const reviewController = require("../controllers/reviewController")
-const middleware = require("../middleware/middleware")
+const middleware = require('../middleware/middleware')
 
 
 router.post("/register", userController.createUser)

@@ -18,19 +18,10 @@ const login = async function (req, res) {
         if (!userMatch) return res.status(400).send({ status: false, msg: "Email or Password is incorrect" })
 
         const token = jwt.sign({
-<<<<<<< HEAD
             userId: userMatch._id,
             batch:"Thorium",
             groupNo:"19"
         }, "Group-19", {expiresIn: "30m" })
-=======
-            userId: userMatch._id.toString(),
-            batch: "Thorium",
-            groupNo: "19"
-        }, "Group-19", { expiresIn: "30m" })
-
-        // res.setHeader("group19", token);
->>>>>>> 318d469f79ae3a41ba1cb349b5240cf05d4f706d
         return res.status(200).send({ status: true, msg: "You are successfully logged in", token })
     }
     catch (error) {

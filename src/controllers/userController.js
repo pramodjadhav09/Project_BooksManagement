@@ -1,6 +1,9 @@
 const userModel = require("../models/userModel")
 const validator = require("../validator/validator")
 
+
+
+//CREATEUSER---------
 const createUser = async (req, res) => {
     try {
         const data = req.body;

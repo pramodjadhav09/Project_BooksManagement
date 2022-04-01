@@ -3,11 +3,15 @@ const validator = require("../validator/validator")
 const reviewModel = require("../models/reviewModel")
 
 
-//CREATE BOOK----------------------------------------
+//CREATEBOOK---------
 
-let createBook = async function (req, res) {
+const createBook = async function (req, res) {
     try {
         const data = req.body;
+
+        if (!isValidRequestBody(data)) {
+            return res.status(400).send({ status: false, message: "Invalid request parameters. Please provide book details" })
+        }
 
         if (!validator.isValid(data.title)) { return res.status(400).send({ status: false, message: "title Is Required" }) }
         if (!validator.isValid(data.excerpt)) { return res.status(400).send({ status: false, message: "Excerpt Is Requird" }) }
@@ -32,7 +36,7 @@ let createBook = async function (req, res) {
 
 
 
-//GET BOOKS BY QUERY---------------------------------
+//GETBOOKSBYQUERY--------
 
 let getBook = async function (req, res) {
     try {
@@ -50,17 +54,18 @@ let getBook = async function (req, res) {
 }
 
 
-//UPDATE BOOK----------------------------------------
+//UPDATEBOOK--------
 
 const updateBooks = async (req, res) => {
     try {
         let bookId = req.params.bookId;
         let data = req.body
-        if (Object.keys(data) == 0) { return res.status(400).send({ status: false, msg: "Pls, provide some data to update." }) }
+        if (!isValidRequestBody(data)) {
+            return res.status(400).send({ status: false, message: "Invalid request parameters. Please provide data to update" })
+        }
 
         let book = await booksModel.findById(bookId)
         if (!book) { return res.status(400).send({ status: false, msg: "No book find with this id, Check your id." }) }
-        // if ((book!=dataDup)&&dataDup) return res.status(400).send({ status: false, msg: "title cannot be duplicate" })
 
         let dataDup = await booksModel.findOne({ title: data.title })
         if (dataDup) { return res.status(400).send({ status: false, msg: "title cannot be duplicate" }) }
@@ -80,7 +85,7 @@ const updateBooks = async (req, res) => {
 }
 
 
-// GET BOOK WITH REVIEW BY ID---------------------------
+//GETBOOKWITHREVIEWBYID----------
 
 const getBooksById = async function (req, res) {
     try {
@@ -102,7 +107,7 @@ const getBooksById = async function (req, res) {
 
 
 
-// DELETE BOOK----------------------------------------
+//DELETEBOOK--------
 
 let deleteBook = async function (req, res) {
     try {
@@ -113,7 +118,7 @@ let deleteBook = async function (req, res) {
         if (book.isDeleted == true) { return res.status(400).send({ status: false, msg: "Books has already been deleted" }) }
 
         let deletedBooks = await booksModel.findOneAndUpdate({ _id: bookId },
-            { $set: { isDeleted:true} }, { new: true })
+            { $set: { isDeleted: true } }, { new: true })
         return res.status(201).send({ status: true, msg: "Book Deleted Successfully" })
     }
     catch (err) { return res.status(500).send({ status: false, message: err.message }) }

@@ -1,7 +1,7 @@
 const booksModel = require('../models/booksModel');
 const validator = require("../validator/validator")
 const reviewModel = require("../models/reviewModel")
-
+const awsS3 = require("../controllers/awsS3")
 
 //CREATEBOOK---------
 
@@ -27,7 +27,12 @@ const createBook = async function (req, res) {
         if (duplicateISBN) { return res.status(404).send({ status: false, message: "ISBN already exists, ISBN must be unique" }) }
 
         let savedData = await booksModel.create(data)
-        res.status(201).send({ status: true, msg: 'created book sucssesfully', data: savedData })
+        //res.status(201).send({ status: true, msg: 'created book sucssesfully', data: savedData })
+
+        //adding a key of awsS3 file upload url in object-
+        let createBookData = savedData.toObject()
+        createBookData.bookCover = awsS3.uploadFiles
+        res.status(201).send({ status: true, msg: 'created book sucssesfully', data: createBookData })
     }
     catch (error) {
         return res.status(500).send({ msg: error.message })

@@ -5,10 +5,10 @@ const booksModel = require("../models/booksModel");
 //AUTHENTICATION-
 const authentication = async function (req, res, next) {
     try {
-        let token = req.headers["group19"];
+        let token = req.headers["x-api-key"];
         if (!token) return res.status(400).send({ status: false, msg: "login is required" })
 
-        let decodedtoken = jwt.verify(token, "Group-19")
+        let decodedtoken = jwt.verify(token, "secret key")
 
         if (!decodedtoken) return res.status(400).send({ status: false, msg: "token is invalid" })
         next();
@@ -23,8 +23,8 @@ const authentication = async function (req, res, next) {
 //AUTHORIZATION-
 let authorization = async function (req, res, next) {
     try {
-        let token = req.headers["group19"];
-        let decodedtoken = jwt.verify(token, "Group-19")
+        let token = req.headers["x-api-key"];
+        let decodedtoken = jwt.verify(token, "secret key")
         let bookId = req.params.bookId;
 
         let book = await booksModel.findById(bookId)

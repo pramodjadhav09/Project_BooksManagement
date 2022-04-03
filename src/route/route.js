@@ -13,16 +13,17 @@ const awsS3 = require('../controllers/awsS3')
 router.post("/register", userController.createUser)
 router.post("/login", loginController.login)
 //BOOK_API'S-
-router.post("/book", middleware.authentication, awsS3.uploadFiles, bookController.createBook)
+router.post("/book", middleware.authentication, bookController.createBook)
 router.get("/books", middleware.authentication, bookController.getBook)
 router.get("/books/:bookId", middleware.authentication, bookController.getBooksById)
 router.put("/books/:bookId", middleware.authentication, middleware.authorization, bookController.updateBooks)
 router.delete("/books/:bookId", middleware.authentication, middleware.authorization, bookController.deleteBook)
-//REVIEW_API'S
+//REVIEW_API'S-
 router.post("/books/:bookId/review", middleware.authentication, reviewController.createReview)
 router.put("/books/:bookId/review/:reviewId", middleware.authentication, reviewController.updateReviews)
 router.delete("/books/:bookId/review/:reviewId", middleware.authentication, reviewController.deleteReview)
-
+//UPLOAD_FILE-
+router.post("/uploadfile",awsS3.uploadFiles,)
 
 
 module.exports = router;

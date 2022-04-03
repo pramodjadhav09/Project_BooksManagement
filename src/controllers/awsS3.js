@@ -13,7 +13,7 @@ const router = express.Router();
 aws.config.update(
     {
         accessKeyId: "AKIAY3L35MCRVFM24Q7U",
-        secretAccessKeyId: "qGG1HE0qRixcW1T1Wg1bv+08tQrIkFVyDFqSft4J",
+        secretAccessKey: "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",
         region: "ap-south-1"
     }
 )
@@ -34,8 +34,6 @@ let uploadFile = async (file) => {
             if (err) {
                 return reject({ "error": err })
             }
-            // console.log(data)
-            // console.log(" file uploaded succesfully ")
             return resolve(data.Location)
         }
         )
